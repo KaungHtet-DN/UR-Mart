@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "1099353754289",
+    "firebase_url": "https://ur-mart-1cf23-default-rtdb.firebaseio.com",
+    "project_id": "ur-mart-1cf23",
+    "storage_bucket": "ur-mart-1cf23.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1099353754289:android:07cadb18f337315ea6f090",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBsceDEkDXkkWQ6hiXVkrwN_2KhuQk1IQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1099353754289:android:ddf46b2c4fc8f479a6f090",
+        "android_client_info": {
+          "package_name": "com.example.ur_mart"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBsceDEkDXkkWQ6hiXVkrwN_2KhuQk1IQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
