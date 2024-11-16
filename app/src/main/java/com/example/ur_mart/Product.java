@@ -1,7 +1,9 @@
 package com.example.ur_mart;
 
 public class Product {
-    private String productId, productName, description, price, image;
+    private String productId, productName, description, image;
+
+    private double price;
 
     public String getproductId() {
         return productId;
@@ -15,7 +17,7 @@ public class Product {
         return description;
     }
 
-    public String getPrice() {
+    public Double getPrice() {
         return price;
     }
 
@@ -23,7 +25,7 @@ public class Product {
         return image;
     }
 
-    public Product(String productId, String productName, String description, String price, String image) {
+    public Product(String productId, String productName, String description, Double price, String image) {
         this.productId = productId;
         this.productName = productName;
         this.description = description;

@@ -10,6 +10,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -34,12 +35,13 @@ public class ProductListActivity extends AppCompatActivity {
     Button logoutButton;
     TextView welcomeUserName;
     FirebaseUser currentUser;
-    FloatingActionButton fab;
+    FloatingActionButton fab, fabCart;
     RecyclerView recyclerView;
     List<Product> productList;
     DatabaseReference databaseReference;
     ValueEventListener eventListener;
-
+    SearchView searchView;
+    MyAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,8 +51,11 @@ public class ProductListActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         logoutButton = findViewById(R.id.logout_button);
         fab = findViewById(R.id.fab);
+        fabCart = findViewById(R.id.fabCart);
         recyclerView = findViewById(R.id.recyclerViewProductList);
         welcomeUserName = findViewById(R.id.welcomeUserName);
+        searchView = findViewById(R.id.search);
+        searchView.clearFocus();
 
         currentUser = mAuth.getCurrentUser();
         welcomeUserName.setText("Welcome, " + currentUser.getEmail().toString());
@@ -59,6 +64,15 @@ public class ProductListActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ProductListActivity.this,AddProductActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        fabCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProductListActivity.this,ShoppingCartActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -74,7 +88,7 @@ public class ProductListActivity extends AppCompatActivity {
         dialog.show();
 
         productList = new ArrayList<>();
-        MyAdapter adapter = new MyAdapter(ProductListActivity.this, productList);
+        adapter = new MyAdapter(ProductListActivity.this, productList);
         recyclerView.setAdapter(adapter);
 
         databaseReference = FirebaseDatabase.getInstance().getReference("Products");
@@ -98,6 +112,19 @@ public class ProductListActivity extends AppCompatActivity {
             }
         });
 
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                searchList(newText);
+                return false;
+            }
+        });
+
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,6 +134,15 @@ public class ProductListActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
 
+    public void searchList(String text){
+        ArrayList<Product> searchList = new ArrayList<>();
+        for(Product product: productList){
+            if(product.getProductName().toLowerCase().contains(text.toLowerCase())){
+                searchList.add(product);
+            }
+        }
+        adapter.searchProductList(searchList);
     }
 }

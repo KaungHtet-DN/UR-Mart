@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ShoppingCartActivity"
+    android:orientation="vertical"
+    android:padding="5dp"
+    android:background="@drawable/background"
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Shopping Cart"
+        android:textSize="25sp"
+        android:textColor="@color/white"
+        android:layout_gravity="center"
+        android:layout_marginTop="25dp"
+        />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:id="@+id/shoppingCartRecyclerCard"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="10dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="8dp"
+        >
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerCart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/shoppingCartTotalAmountCard"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="10dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="8dp"
+        >
+        <TextView
+            android:id="@+id/totalAmountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total Amount (CAD): 0.0"
+            android:textSize="20sp"
+            android:layout_margin="10dp"
+            android:layout_gravity="center"
+            android:textColor="@color/black"
+        />
+    </androidx.cardview.widget.CardView>
+    <TextView
+        android:id="@+id/cartNoItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No item in cart."
+        android:textSize="23sp"
+        android:textColor="@color/white"
+        android:layout_marginTop="16dp"
+        android:layout_gravity="center"
+        android:paddingRight="20dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        >
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Back to Shop"
+            android:layout_gravity="center"
+            android:textColor="@color/white"
+            android:layout_marginRight="10dp"
+            android:id="@+id/shoppingCartBackToShop"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Check Out"
+            android:layout_gravity="center"
+            android:textColor="@color/white"
+            android:id="@+id/shoppingCartCheckOut"
+            android:layout_marginRight="10dp"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clear Cart"
+            android:layout_gravity="center"
+            android:textColor="@color/white"
+            android:id="@+id/shoppingCartClearAll"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>

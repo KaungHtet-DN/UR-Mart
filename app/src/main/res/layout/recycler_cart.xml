@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="start">
+
+    <TextView
+        android:id="@+id/cartProductName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Product Name"
+        android:textSize="20sp" />
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/cartItemId"
+            android:visibility="gone"
+            />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/cartProductId"
+        android:visibility="gone"
+        />
+
+    <!-- Spacer to push the button -->
+    <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+    <ImageButton
+            android:id="@+id/cartRemoveButton"
+            android:layout_width="40dp"
+            android:layout_height="35dp"
+            android:layout_gravity="end"
+            android:src="@drawable/baseline_delete_forever_24"
+            android:backgroundTint="@color/white"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="start"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Price - "
+            android:textSize="18sp"
+            android:textAlignment="textStart"
+            />
+
+        <TextView
+            android:id="@+id/cartPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0.0"
+            android:textSize="18sp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Quantity - "
+            android:textSize="18sp"
+            android:paddingLeft="40dp"
+            android:textAlignment="center"
+            />
+
+        <TextView
+            android:id="@+id/cartQuantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Amount - "
+            android:textSize="18sp"
+            android:textAlignment="textEnd"
+            android:paddingLeft="30dp"
+            />
+
+        <TextView
+            android:id="@+id/cartAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0.00"
+            android:textSize="18sp"
+            android:textAlignment="textEnd" />
+    </LinearLayout>
+
+
+</LinearLayout>

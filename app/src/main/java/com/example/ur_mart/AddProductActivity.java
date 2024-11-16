@@ -30,6 +30,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Firebase;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -121,7 +123,7 @@ public class AddProductActivity extends AppCompatActivity {
     public void uploadData(){
         String productName = uploadProductName.getText().toString();
         String description = uploadDescription.getText().toString();
-        String price = uploadPrice.getText().toString();
+        Double price = Double.parseDouble(uploadPrice.getText().toString());
         String productId = UUID.randomUUID().toString();
 
         Product product =new Product( productId, productName,description,price, imageURL);

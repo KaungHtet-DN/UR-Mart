@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
@@ -37,7 +38,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
         Glide.with(context).load(productList.get(position).getImage()).into(holder.recImage);
         holder.recProductName.setText(productList.get(position).getProductName());
         holder.recProductId.setText(productList.get(position).getproductId());
-        holder.recPrice.setText("$ " + productList.get(position).getPrice());
+        holder.recPrice.setText("CAD " + String.valueOf(productList.get(position).getPrice()));
 
         holder.recCard.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,7 +49,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
                 intent.putExtra("ProductId", productList.get(holder.getAdapterPosition()).getproductId());
                 intent.putExtra("Description", productList.get(holder.getAdapterPosition()).getDescription());
                 intent.putExtra("Price", productList.get(holder.getAdapterPosition()).getPrice());
-
+                Double test = productList.get(holder.getAdapterPosition()).getPrice();
                 context.startActivity(intent);
             }
         });
@@ -57,6 +58,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
     @Override
     public int getItemCount() {
         return productList.size();
+    }
+
+    public void searchProductList(ArrayList<Product> searchList){
+        productList = searchList;
+        notifyDataSetChanged();
     }
 }
 
