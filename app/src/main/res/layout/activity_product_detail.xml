@@ -219,13 +219,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Add To Cart"
+            android:backgroundTint="@color/teal"
             android:layout_marginRight="10dp"/>
 
         <Button
-            android:id="@+id/detailCheckoutButton"
+            android:id="@+id/detailGoToCartButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Check Out" />
+            android:backgroundTint="@color/yellow"
+            android:text="Go To Cart" />
     </LinearLayout>
 
 </LinearLayout>

@@ -11,17 +11,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginTop="40dp"
         >
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="287dp"
             android:layout_height="wrap_content"
             android:id="@+id/welcomeUserName"
             android:text="UserName"
             android:textColor="@color/white"
             android:textSize="18sp"
             android:gravity="center"
-            android:layout_marginTop="40dp"
-            android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             />
         <Button
@@ -30,8 +29,6 @@
             android:id="@+id/logout_button"
             android:text="Log Out"
             android:textSize="15sp"
-            android:layout_marginTop="40dp"
-            android:layout_marginLeft="80dp"
             app:cornerRadius = "10dp"/>
 
     </LinearLayout>
@@ -47,7 +44,7 @@
         app:searchHintIcon="@null"
         app:queryHint="Search..."
         android:focusable="false"
-        android:background="@drawable/lavender_border"
+        android:background="@drawable/border"
         app:closeIcon="@drawable/baseline_clear_24"
         app:searchIcon="@drawable/baseline_search_24"/>
 
@@ -80,6 +77,6 @@
         android:layout_marginBottom="80dp"
         android:layout_marginRight="50dp"
         android:src="@drawable/baseline_shopping_cart_24"
-        android:backgroundTint="@color/lavender"
+        android:backgroundTint="@color/teal"
         app:tint="@color/white"/>
 </RelativeLayout>

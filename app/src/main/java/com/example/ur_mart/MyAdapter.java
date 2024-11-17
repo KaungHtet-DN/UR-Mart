@@ -2,28 +2,44 @@ package com.example.ur_mart;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
-    private Context context;
-    private List<Product> productList;
+    Context context;
+    List<Product> productList;
+    MyViewHolder.OnItemClickListener listener;
+    TextView productId, productName, price;
+    FirebaseAuth mAuth;
+    FirebaseUser currentUser;
 
-    public MyAdapter(Context context, List<Product> productList) {
+    public MyAdapter(Context context, List<Product> productList, MyViewHolder.OnItemClickListener listener) {
         this.context = context;
         this.productList = productList;
+        this.listener = listener;
     }
 
     @NonNull
@@ -35,6 +51,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+
+        Product item = productList.get(position);
         Glide.with(context).load(productList.get(position).getImage()).into(holder.recImage);
         holder.recProductName.setText(productList.get(position).getProductName());
         holder.recProductId.setText(productList.get(position).getproductId());
@@ -53,6 +73,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
                 context.startActivity(intent);
             }
         });
+
+        holder.productListAddToCartButton.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onAddToCartClick(item);
+                addToCart(item);
+            }
+        });
     }
 
     @Override
@@ -64,12 +91,32 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
         productList = searchList;
         notifyDataSetChanged();
     }
+
+    public void addToCart(Product product){
+        String cartItemId = UUID.randomUUID().toString(); // Generate a unique UUID
+
+        double amount = 1 * product.getPrice();
+        ShoppingCartItem item = new ShoppingCartItem(cartItemId, product.getproductId(), product.getProductName(), 1, product.getPrice(), amount);
+
+        if(currentUser != null) {
+            DatabaseReference cartRef = FirebaseDatabase.getInstance().getReference("shopping_cart").child(currentUser.getUid());
+
+            cartRef.child(item.getCartItemId()).setValue(item).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Toast.makeText(context, product.getProductName() + " is added to the cart.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Log.e("Failed item adding to the cart.", "ProductId: " + product.getproductId(), task.getException());
+                }
+            });
+        }
+    }
 }
 
 class MyViewHolder extends RecyclerView.ViewHolder{
     ImageView recImage;
     TextView recProductName, recProductId, recPrice;
     CardView recCard;
+    ImageButton productListAddToCartButton;
 
     public MyViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -79,5 +126,10 @@ class MyViewHolder extends RecyclerView.ViewHolder{
         recProductId = itemView.findViewById(R.id.recProductId);
         recPrice = itemView.findViewById(R.id.recPrice);
         recCard = itemView.findViewById(R.id.recCard);
+        productListAddToCartButton = itemView.findViewById(R.id.productListAddToCartButton);
+    }
+
+    public interface OnItemClickListener {
+        void onAddToCartClick(Product product);
     }
 }

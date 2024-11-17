@@ -80,7 +80,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                     if (task.isSuccessful()) {
                         Toast.makeText(context, cartItem.getProductName() + " is removed from the cart.", Toast.LENGTH_SHORT).show();
                     } else {
-                        Log.e("Failed to delete cart item", "CartItemID: " + cartItem.cartItemId, task.getException());
+                        Log.e("Failed to delete the cart item", "CartItemID: " + cartItem.cartItemId, task.getException());
                     }
                 });
     }

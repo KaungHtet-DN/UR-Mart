@@ -88,7 +88,9 @@ public class ProductListActivity extends AppCompatActivity {
         dialog.show();
 
         productList = new ArrayList<>();
-        adapter = new MyAdapter(ProductListActivity.this, productList);
+        adapter = new MyAdapter(ProductListActivity.this, productList, item -> {
+            productList.add(item); // Add to cart
+        });
         recyclerView.setAdapter(adapter);
 
         databaseReference = FirebaseDatabase.getInstance().getReference("Products");

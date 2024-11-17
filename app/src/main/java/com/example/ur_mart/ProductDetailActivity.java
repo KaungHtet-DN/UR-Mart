@@ -33,7 +33,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     TextView detailProductName, detailProductId, detailDescription, detailPrice;
     ImageView detailImage;
-    Button addtocartButton,detailBacktoshop, checkoutButton;
+    Button addtocartButton,detailBacktoshop, detailGoToCartButton;
     ImageButton incrementButton, decrementButton;
     TextView quantityText, totalAmountText;
     int minValue = 0;  // Minimum allowed value
@@ -61,7 +61,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         totalAmountText = findViewById(R.id.detailTotalAmount);
         addtocartButton = findViewById(R.id.detailAddToCartButton);
         detailBacktoshop = findViewById(R.id.detailBacktoshop);
-        checkoutButton = findViewById(R.id.detailCheckoutButton);
+        detailGoToCartButton = findViewById(R.id.detailGoToCartButton);
 
         // set default value 0 to quantity
         quantityText.setText(String.valueOf(quantity));
@@ -123,11 +123,11 @@ public class ProductDetailActivity extends AppCompatActivity {
         });
 
         // Checkout button click event
-        checkoutButton.setOnClickListener(new View.OnClickListener() {
+        detailGoToCartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(validateInputFields()) {
-                    Intent intent = new Intent(ProductDetailActivity.this, CheckoutActivity.class);
+                    Intent intent = new Intent(ProductDetailActivity.this, ShoppingCartActivity.class);
                     startActivity(intent);
                 }
             }
