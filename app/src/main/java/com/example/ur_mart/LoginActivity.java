@@ -1,5 +1,7 @@
 package com.example.ur_mart;
 
+import static com.basgeekball.awesomevalidation.ValidationStyle.BASIC;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -14,6 +16,8 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.basgeekball.awesomevalidation.AwesomeValidation;
+import com.basgeekball.awesomevalidation.utility.RegexTemplate;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -27,6 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     TextView signupRedirectText;
     ProgressBar loginProgressBar;
     FirebaseAuth mAuth;
+    AwesomeValidation mAwesomeValidation;
 
     @Override
     public void onStart() {
@@ -48,6 +53,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         mAuth = FirebaseAuth.getInstance();
+        mAwesomeValidation = new AwesomeValidation(BASIC);
 
         // Initialize controls
         loginEmail = findViewById(R.id.login_email);
@@ -66,7 +72,10 @@ public class LoginActivity extends AppCompatActivity {
                 String email = loginEmail.getText().toString();
                 String password = loginPassword.getText().toString();
 
-                if(validateEmail() && validatePassword()){
+                mAwesomeValidation.addValidation(LoginActivity.this, R.id.login_email, android.util.Patterns.EMAIL_ADDRESS, R.string.err_email);
+                mAwesomeValidation.addValidation(LoginActivity.this, R.id.login_password, RegexTemplate.NOT_EMPTY, R.string.err_login_password);
+
+                if(mAwesomeValidation.validate()){
                     mAuth.signInWithEmailAndPassword(email, password)
                             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override
@@ -109,36 +118,5 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
-
-    public Boolean validateEmail(){
-        String email = loginEmail.getText().toString();
-        if(email.isEmpty()){
-            loginEmail.setError("Email cannot be empty.");
-            return  false;
-        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-            loginEmail.setError("Invalid email.");
-            return  false;
-        }
-        else {
-            loginEmail.setError(null);
-            return true;
-        }
-    }
-
-    public Boolean validatePassword(){
-        String password = loginPassword.getText().toString();
-        if(password.isEmpty()){
-            loginPassword.setError("Password cannot be empty.");
-            return  false;
-        }
-        else if (password.length() < 8){
-            loginPassword.setError("Minimum password length is 8.");
-            return  false;
-        }
-        else {
-            loginPassword.setError(null);
-            return true;
-        }
     }
 }

@@ -1,3 +1,17 @@
 <resources>
+    <string name="err_username">Username is required.</string>
+    <string name="err_password">The password should contain at least 8 characters, including at least one lower case letter, one upper case letter, one number and one special character.</string>
+    <string name="err_password_confirmation">Please re-enter the password</string>
+    <string name="err_login_password">Password is required.</string>
+
     <string name="app_name">UR_Mart: Shop Smart, Shop Easy</string>
+    <string name="err_name">Name is required.</string>
+    <string name="err_phoneno">Enter valid phone number.</string>
+    <string name="err_email">Enter valid email.</string>
+    <string name="err_address">Address is required.</string>
+    <string name="err_postalcode">Enter valid postal code.</string>
+    <string name="err_creditcard_number">Enter valid credit card number.</string>
+    <string name="err_creditcard_holder">Enter valid card holder.</string>
+    <string name="err_creditcard_expirydate">Enter valid expiry date.</string>
+    <string name="err_creditcard_securitynumber">Enter valid security number.</string>
 </resources>

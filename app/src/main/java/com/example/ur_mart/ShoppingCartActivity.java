@@ -27,7 +27,7 @@ import java.util.List;
 
 public class ShoppingCartActivity extends AppCompatActivity {
 
-    CardView shoppingCartRecyclerCard, shoppingCartTotalAmountCard;
+    CardView shoppingCartTotalAmountCard;
     RecyclerView recyclerCart;
     CartAdapter cartAdapter;
     TextView totalAmountTextView, cartNoItem;
@@ -43,7 +43,6 @@ public class ShoppingCartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_shopping_cart);
         mAuth = FirebaseAuth.getInstance();
 
-        shoppingCartRecyclerCard = findViewById(R.id.shoppingCartRecyclerCard);
         shoppingCartTotalAmountCard = findViewById(R.id.shoppingCartTotalAmountCard);
         recyclerCart = findViewById(R.id.recyclerCart);
         totalAmountTextView = findViewById(R.id.totalAmountTextView);
@@ -87,6 +86,7 @@ public class ShoppingCartActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ShoppingCartActivity.this, CheckoutActivity.class);
+                intent.putExtra("Amount", totalAmountTextView.getText() );
                 startActivity(intent);
                 finish();
             }
@@ -108,12 +108,12 @@ public class ShoppingCartActivity extends AppCompatActivity {
                 }
 
                 // Update the total amount TextView
-                totalAmountTextView.setText("Total (CAD): " + String.format("%.2f", totalAmount));
+                totalAmountTextView.setText(String.format("%.2f", totalAmount));
 
                 if(cartItems == null || cartItems.size() == 0){
                     shoppingCartClearAll.setVisibility(View.GONE);
                     shoppingCartCheckOut.setVisibility(View.GONE);
-                    shoppingCartRecyclerCard.setVisibility(View.GONE);
+                    recyclerCart.setVisibility(View.GONE);
                     shoppingCartTotalAmountCard.setVisibility(View.GONE);
                 }else {
                     cartNoItem.setVisibility(View.GONE);

@@ -5,7 +5,7 @@ import android.net.Uri;
 import java.util.UUID;
 
 public class ShoppingCartItem {
-    String cartItemId, productId, productName;
+    String cartItemId, productId, productName, image;
     int quantity;
     double price;
 
@@ -33,6 +33,14 @@ public class ShoppingCartItem {
         this.productName = productName;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     public int getQuantity() {
         return quantity;
     }
@@ -57,10 +65,11 @@ public class ShoppingCartItem {
         this.amount = amount;
     }
 
-    public ShoppingCartItem(String cartItemId, String productId, String productName, int quantity, double price, double amount) {
+    public ShoppingCartItem(String cartItemId, String productId, String productName, String image, int quantity, double price, double amount) {
         this.cartItemId = cartItemId;
         this.productId = productId;
         this.productName = productName;
+        this.image = image;
         this.quantity = quantity;
         this.price = price;
         this.amount = amount;

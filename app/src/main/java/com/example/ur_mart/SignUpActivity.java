@@ -1,5 +1,7 @@
 package com.example.ur_mart;
 
+import static com.basgeekball.awesomevalidation.ValidationStyle.BASIC;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -14,21 +16,29 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.basgeekball.awesomevalidation.AwesomeValidation;
+import com.basgeekball.awesomevalidation.utility.RegexTemplate;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.HashMap;
 import java.util.UUID;
 
 public class SignUpActivity extends AppCompatActivity {
 
-    EditText signupEmail, signupPassword, signupConfirmPassword;
+    EditText signupUsername, signupEmail, signupPhoneNo, signupPassword, signupConfirmPassword;
     TextView loginRedirectText;
     Button signupButton;
     ProgressBar signupProgressBar;
     FirebaseAuth mAuth;
+    DatabaseReference databaseRef;
+    AwesomeValidation mAwesomeValidation;
+    String PhoneNumber_Regex = "^(\\+1[-\\s]?|1[-\\s]?|\\()?(\\d{3})(\\)|[-\\s])?(\\d{3})[-\\s]?(\\d{4})$";
 
     @Override
     public void onStart() {
@@ -49,9 +59,12 @@ public class SignUpActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_sign_up);
         mAuth = FirebaseAuth.getInstance();
+        mAwesomeValidation = new AwesomeValidation(BASIC);
 
         // Initialize controls
         signupEmail = findViewById(R.id.signup_email);
+        signupUsername = findViewById(R.id.signup_username);
+        signupPhoneNo = findViewById(R.id.signup_phoneno);
         signupPassword = findViewById(R.id.signup_password);
         signupConfirmPassword = findViewById(R.id.signup_confirmpassword);
         signupProgressBar = findViewById(R.id.signup_progressbar);
@@ -65,37 +78,18 @@ public class SignUpActivity extends AppCompatActivity {
                 // Show progress bar
                 signupProgressBar.setVisibility(View.VISIBLE);
 
-                // Get user input values
-                String email = signupEmail.getText().toString();
-                String password = signupPassword.getText().toString();
-                String confirmPassword = signupConfirmPassword.getText().toString();
+                // Add validation
+                mAwesomeValidation.addValidation(SignUpActivity.this, R.id.signup_username, RegexTemplate.NOT_EMPTY, R.string.err_name);
+                mAwesomeValidation.addValidation(SignUpActivity.this, R.id.signup_email, android.util.Patterns.EMAIL_ADDRESS, R.string.err_email);
+                mAwesomeValidation.addValidation(SignUpActivity.this, R.id.signup_phoneno, PhoneNumber_Regex, R.string.err_phoneno);
+                mAwesomeValidation.addValidation(SignUpActivity.this, R.id.signup_password, "(?=.*[a-z])(?=.*[A-Z])(?=.*[\\d])(?=.*[~`!@#\\$%\\^&\\*\\(\\)\\-_\\+=\\{\\}\\[\\]\\|\\;:\"<>,./\\?]).{8,}", R.string.err_password);
+                mAwesomeValidation.addValidation(SignUpActivity.this, R.id.signup_confirmpassword, R.id.signup_password, R.string.err_password_confirmation);
 
                 // Validate user input
-                if(validateEmail() && validatePassword() && validateConfirmPassword()) {
-                    // Create user with Firebase by Email and Password
-                    mAuth.createUserWithEmailAndPassword(email, password)
-                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    // Hide progress bar
-                                    signupProgressBar.setVisibility(View.GONE);
-
-                                    if (task.isSuccessful()) {
-                                        // Show account created message
-                                        Toast.makeText(SignUpActivity.this, "Your account is successfully created.", Toast.LENGTH_SHORT).show();
-
-                                        // Change activity to login page
-                                        Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
-                                        startActivity(intent);
-                                        finish();
-                                    } else {
-                                        // If sign in fails, display a message to the user.
-                                        Toast.makeText(SignUpActivity.this, "Authentication failed.",
-                                                Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
-                } else {
+                if(mAwesomeValidation.validate()) {
+                    registerUser();
+                }
+                else {
                     signupProgressBar.setVisibility(View.GONE);
                 }
             }
@@ -112,51 +106,41 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
-    public Boolean validateEmail(){
-        String email = signupEmail.getText().toString();
-        if(email.isEmpty()){
-            signupEmail.setError("Email cannot be empty.");
-            return  false;
-        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-            signupEmail.setError("Invalid email.");
-            return  false;
-        }
-        else {
-            signupEmail.setError(null);
-            return true;
-        }
-    }
+    private void registerUser() {
+        String name = signupUsername.getText().toString().trim();
+        String email = signupEmail.getText().toString().trim();
+        String phone = signupPhoneNo.getText().toString().trim();
+        String password = signupPassword.getText().toString().trim();
 
-    public Boolean validatePassword(){
-        String password = signupPassword.getText().toString();
-        if(password.isEmpty()){
-            signupPassword.setError("Password cannot be empty.");
-            return  false;
-        }
-        else if (password.length() < 8){
-            signupPassword.setError("Minimum password length is 8.");
-            return  false;
-        }
-        else {
-            signupPassword.setError(null);
-            return true;
-        }
-    }
+        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+            // Get the registered user
+            FirebaseUser firebaseUser = mAuth.getCurrentUser();
 
-    public Boolean validateConfirmPassword(){
-        String password = signupPassword.getText().toString();
-        String confirmPassword = signupConfirmPassword.getText().toString();
-        if(password.isEmpty()){
-            signupConfirmPassword.setError("Password cannot be empty.");
-            return  false;
-        }
-        else if (!password.equals(confirmPassword)){
-            signupConfirmPassword.setError("Password and Confirm Password are not matched.");
-            return  false;
-        }
-        else {
-            signupConfirmPassword.setError(null);
-            return true;
-        }
+                if (firebaseUser != null) {
+                    String uid = firebaseUser.getUid();
+
+                    // Store user details in Firebase Realtime Database using UID as key
+                    databaseRef = FirebaseDatabase.getInstance().getReference("Users").child(uid);
+
+                    UserInfo userInfo = new UserInfo(uid,name, email, phone);
+
+                    databaseRef.setValue(userInfo).addOnCompleteListener(dbTask -> {
+                        signupProgressBar.setVisibility(View.GONE);
+
+                        if (dbTask.isSuccessful()) {
+                            Toast.makeText(SignUpActivity.this, "User registered successfully", Toast.LENGTH_SHORT).show(); // Change activity to login page
+                            Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                            finish();
+                            } else {
+                                Toast.makeText(SignUpActivity.this, "Failed to save user details: " + dbTask.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                    });
+                }
+            } else {
+                Toast.makeText(SignUpActivity.this, "Registration failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

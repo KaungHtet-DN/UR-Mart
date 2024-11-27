@@ -10,15 +10,27 @@
     android:orientation="vertical"
     android:background="@drawable/background">
 
-    <ImageView
-        android:layout_width="400dp"
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
         android:layout_height="350dp"
-        android:id="@+id/detailImage"
-        android:padding="8dp"
-        android:layout_marginTop="40dp"
-        android:layout_gravity="center"
-        android:src="@drawable/uploadimg"
-        android:scaleType="fitXY"/>
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginTop="50dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="8dp"
+        >
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/detailImage"
+            android:padding="8dp"
+            android:layout_gravity="center"
+            android:src="@drawable/uploadimg"
+            android:scaleType="fitXY"/>
+
+    </androidx.cardview.widget.CardView>
+
 
     <androidx.cardview.widget.CardView
     android:layout_width="match_parent"
@@ -44,7 +56,7 @@
         android:layout_marginTop="10dp"
         android:textSize="25sp"
         android:layout_gravity="center"
-        android:textColor="@color/lavender"/>
+        android:textColor="@color/teal"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -134,8 +146,7 @@
                 android:layout_width="30dp"
                 android:layout_height="35dp"
                 android:src="@drawable/baseline_arrow_left_24"
-                android:backgroundTint="@color/lavender"
-                app:tint="@color/white"
+                app:tint="@color/black"
                 />
 
             <TextView
@@ -154,8 +165,7 @@
                 android:layout_width="30dp"
                 android:layout_height="35dp"
                 android:src="@drawable/baseline_arrow_right_24"
-                android:backgroundTint="@color/lavender"
-                app:tint="@color/white"/>
+                app:tint="@color/black"/>
         </LinearLayout>
         </LinearLayout>
 
@@ -229,5 +239,4 @@
             android:backgroundTint="@color/yellow"
             android:text="Go To Cart" />
     </LinearLayout>
-
 </LinearLayout>

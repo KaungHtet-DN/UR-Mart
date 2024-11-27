@@ -11,7 +11,7 @@
     android:background="@drawable/background">
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="400dp"
         android:layout_margin="30dp"
         app:cardCornerRadius="30dp"
         app:cardElevation="20dp"
@@ -51,12 +51,12 @@
                 android:layout_height="50dp"
                 android:id="@+id/login_password"
                 android:background="@drawable/border_black"
+                android:drawableTint="@color/yellow"
                 android:layout_marginTop="20dp"
                 android:padding="8dp"
                 android:hint="Password"
                 android:inputType="textPassword"
                 android:drawableLeft="@drawable/baseline_lock_24"
-                android:drawableTint="@color/yellow"
                 android:drawablePadding="8dp"
                 android:textColor="@color/black"/>
 

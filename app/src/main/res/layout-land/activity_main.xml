@@ -11,8 +11,8 @@
     android:background="@drawable/background">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="580dp"
+        android:layout_height="400dp"
         android:layout_margin="30dp"
         app:cardCornerRadius="30dp"
         app:cardElevation="20dp"
@@ -27,7 +27,7 @@
             <ImageView
                 android:id="@+id/logo"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="280dp"
                 app:srcCompat="@drawable/logo" />
 
             <TextView
@@ -49,8 +49,8 @@
                 android:textSize="18sp"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:layout_marginTop="25dp"
-                android:layout_marginBottom="25dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:backgroundTint="@color/teal"
                 app:cornerRadius = "20dp"
                 />

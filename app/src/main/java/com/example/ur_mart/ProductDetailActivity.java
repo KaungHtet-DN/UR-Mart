@@ -22,8 +22,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -33,15 +36,16 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     TextView detailProductName, detailProductId, detailDescription, detailPrice;
     ImageView detailImage;
+    String imageURI;
     Button addtocartButton,detailBacktoshop, detailGoToCartButton;
     ImageButton incrementButton, decrementButton;
     TextView quantityText, totalAmountText;
-    int minValue = 0;  // Minimum allowed value
+    int minValue = 1;  // Minimum allowed value
     int maxValue = 100; // Maximum allowed value
-    int quantity = 0; // Initial value of quantity
-    double totalAmount = 0.00; // Initial value of total amount
+    int quantity = 1; // Initial value of quantity
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,17 +70,17 @@ public class ProductDetailActivity extends AppCompatActivity {
         // set default value 0 to quantity
         quantityText.setText(String.valueOf(quantity));
 
-        // set default value 0.00 to total amount
-        totalAmountText.setText(String.valueOf(totalAmount));
-
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
             detailProductName.setText(bundle.getString("ProductName"));
             detailProductId.setText(bundle.getString("ProductId"));
             detailDescription.setText(bundle.getString("Description"));
             detailPrice.setText(String.valueOf(bundle.getDouble("Price")));
-
+            imageURI = bundle.getString("Image");
             Glide.with(this).load(bundle.getString("Image")).into(detailImage);
+
+            // set default value 0.00 to total amount
+            totalAmountText.setText(String.valueOf(bundle.getDouble("Price")));
         }
 
         // increase quantity button click event
@@ -155,31 +159,78 @@ public class ProductDetailActivity extends AppCompatActivity {
         String cartItemId = UUID.randomUUID().toString(); // Generate a unique UUID
         String productId = detailProductId.getText().toString();
         String productName = detailProductName.getText().toString();
+        String image = imageURI;
         int quantity = Integer.parseInt(quantityText.getText().toString());
         double price = Double.parseDouble(detailPrice.getText().toString());
         double amount = Double.parseDouble(totalAmountText.getText().toString());
 
-        ShoppingCartItem item = new ShoppingCartItem(cartItemId, productId, productName, quantity, price, amount);
+        ShoppingCartItem item = new ShoppingCartItem(cartItemId, productId, productName, image, quantity, price, amount);
 
         if(currentUser != null) {
-            DatabaseReference cartRef = FirebaseDatabase.getInstance().getReference("shopping_cart").child(currentUser.getUid());
+            DatabaseReference cartRef = FirebaseDatabase.getInstance().getReference("shopping_cart").child(currentUser.getUid()).child(item.getProductId());
 
-            cartRef.child(item.getCartItemId()).setValue(item).addOnCompleteListener(new OnCompleteListener<Void>() {
+            cartRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if(task.isSuccessful()) {
-                        Toast.makeText(ProductDetailActivity.this, "Item added to cart successfully.", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(ProductDetailActivity.this, ProductListActivity.class);
-                        startActivity(intent);
-                        finish();
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.exists()){
+                        int existingQuantity = dataSnapshot.child("quantity").getValue(Integer.class);
+                        int newQuantity = existingQuantity + item.getQuantity();
+
+                        // Update the quantity field
+                        cartRef.child("quantity").setValue(newQuantity)
+                                .addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(ProductDetailActivity.this, "Item quantity updated successfully.", Toast.LENGTH_SHORT).show();
+                                        navigateToProductList();
+                                    }
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(ProductDetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                });
+                    }else {
+                        // Product does not exist, insert it as a new item
+                        cartRef.setValue(item)
+                                .addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(ProductDetailActivity.this, "Item added to cart successfully.", Toast.LENGTH_SHORT).show();
+                                        navigateToProductList();
+                                    }
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(ProductDetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                });
                     }
                 }
-            }).addOnFailureListener(new OnFailureListener() {
+
                 @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(ProductDetailActivity.this,e.getMessage(), Toast.LENGTH_SHORT).show();
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Toast.makeText(ProductDetailActivity.this, "Error occurred while saving: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
+
+
+//            cartRef.child(item.getCartItemId()).setValue(item).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                @Override
+//                public void onComplete(@NonNull Task<Void> task) {
+//                    if(task.isSuccessful()) {
+//                        Toast.makeText(ProductDetailActivity.this, "Item added to cart successfully.", Toast.LENGTH_SHORT).show();
+//                        Intent intent = new Intent(ProductDetailActivity.this, ProductListActivity.class);
+//                        startActivity(intent);
+//                        finish();
+//                    }
+//                }
+//            }).addOnFailureListener(new OnFailureListener() {
+//                @Override
+//                public void onFailure(@NonNull Exception e) {
+//                    Toast.makeText(ProductDetailActivity.this,e.getMessage(), Toast.LENGTH_SHORT).show();
+//                }
+//            });
         }
+    }
+
+    private void navigateToProductList() {
+        Intent intent = new Intent(ProductDetailActivity.this, ProductListActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

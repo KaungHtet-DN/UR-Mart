@@ -42,6 +42,7 @@ public class ProductListActivity extends AppCompatActivity {
     ValueEventListener eventListener;
     SearchView searchView;
     MyAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +59,7 @@ public class ProductListActivity extends AppCompatActivity {
         searchView.clearFocus();
 
         currentUser = mAuth.getCurrentUser();
-        welcomeUserName.setText("Welcome, " + currentUser.getEmail().toString());
+        getUserName(currentUser.getUid());
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,5 +147,26 @@ public class ProductListActivity extends AppCompatActivity {
             }
         }
         adapter.searchProductList(searchList);
+    }
+
+    public void getUserName(String userId) {
+        // Reference to the user's node
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(userId);
+
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // Retrieve the name
+                    String name = dataSnapshot.child("name").getValue(String.class);
+                    welcomeUserName.setText("Welcome, " + name);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                System.err.println("Error: " + databaseError.getMessage());
+            }
+        });
     }
 }

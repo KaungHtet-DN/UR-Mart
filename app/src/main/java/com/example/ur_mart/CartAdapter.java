@@ -7,9 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -43,12 +45,12 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         currentUser = mAuth.getCurrentUser();
 
         ShoppingCartItem item = cartItems.get(position);
-        holder.cartItemId.setText(item.getCartItemId());
+        Glide.with(context).load(cartItems.get(position).getImage()).into(holder.cartImage);
         holder.productId.setText(item.getProductId());
         holder.productName.setText(item.getProductName());
         holder.price.setText(String.valueOf(item.getPrice()));
         holder.quantity.setText(String.valueOf(item.getQuantity()));
-        holder.amount.setText(String.valueOf(item.getAmount()));
+        holder.amount.setText(String.format("%.2f", item.getPrice() * item.getQuantity()));
 
         holder.cartRemoveButton.setOnClickListener(v -> {
             if (listener != null) {
@@ -71,8 +73,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     public void removeCartItem(ShoppingCartItem cartItem){
         DatabaseReference cartItemRef = FirebaseDatabase.getInstance()
                 .getReference("shopping_cart")
-                .child(currentUser.getUid()) // Navigate to the user's cart
-                .child(cartItem.cartItemId); // Navigate to the specific cart item
+                .child(currentUser.getUid())
+                .child(cartItem.productId);
 
         // Remove the item
         cartItemRef.removeValue()
@@ -86,12 +88,13 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     }
 
 public static class CartViewHolder extends RecyclerView.ViewHolder {
-   TextView cartItemId, productId, productName, price, quantity, amount ;
+   TextView productId, productName, price, quantity, amount ;
    ImageButton cartRemoveButton;
+   ImageView cartImage;
 
    public CartViewHolder(View itemView) {
        super(itemView);
-       cartItemId = itemView.findViewById(R.id.cartItemId);
+       cartImage = itemView.findViewById(R.id.cartImage);
        productId = itemView.findViewById(R.id.cartProductId);
        productName = itemView.findViewById(R.id.cartProductName);
        price = itemView.findViewById(R.id.cartPrice);

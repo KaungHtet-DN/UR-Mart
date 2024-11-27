@@ -1,108 +1,137 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/recCart"
+    android:layout_marginStart="10dp"
+    android:layout_marginEnd="10dp"
+    android:layout_marginVertical="10dp"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="8dp">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="start">
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/cartProductName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Product Name"
-        android:textSize="20sp" />
+        <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="120dp"
+            android:layout_height="110dp"
+            android:id="@+id/cartImage"
+            android:layout_marginStart="10dp"
+            android:padding="5dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/uploadimg"
+            app:shapeAppearanceOverlay="@style/roundedImageViewRounded"/>
 
-    <TextView
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/cartProductId"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_toEndOf="@id/cartImage"
+            android:id="@+id/cartProductInfo"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/cartProductName"
+                android:text="Product Name"
+                android:textColor="@color/yellow"
+                android:textSize="20sp"
+                android:gravity="top"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginStart="10dp"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CAD"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:paddingRight="5dp"
+                    android:textAlignment="textStart"
+                    />
+
+                <TextView
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/cartPrice"
+                    android:text="10.50"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Qty:"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:paddingRight="10dp"
+                    />
+
+                <TextView
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/cartQuantity"
+                    android:text="1"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginStart="10dp"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Amount:"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:paddingRight="10dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/cartAmount"
+                    android:text="10.50"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/cartItemId"
-            android:visibility="gone"
-            />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/cartProductId"
-        android:visibility="gone"
-        />
-
-    <!-- Spacer to push the button -->
-    <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
-    <ImageButton
-            android:id="@+id/cartRemoveButton"
-            android:layout_width="40dp"
-            android:layout_height="35dp"
-            android:layout_gravity="end"
             android:src="@drawable/baseline_delete_forever_24"
+            android:id="@+id/cartRemoveButton"
+            android:layout_toEndOf="@+id/cartProductInfo"
+            android:layout_centerVertical="true"
             android:backgroundTint="@color/white"
-            />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="start"
-        >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Price - "
-            android:textSize="18sp"
-            android:textAlignment="textStart"
+            app:tint="@color/black"
             />
 
-        <TextView
-            android:id="@+id/cartPrice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0.0"
-            android:textSize="18sp"
-            />
+    </RelativeLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Quantity - "
-            android:textSize="18sp"
-            android:paddingLeft="40dp"
-            android:textAlignment="center"
-            />
-
-        <TextView
-            android:id="@+id/cartQuantity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0"
-            android:textSize="18sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Amount - "
-            android:textSize="18sp"
-            android:textAlignment="textEnd"
-            android:paddingLeft="30dp"
-            />
-
-        <TextView
-            android:id="@+id/cartAmount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0.00"
-            android:textSize="18sp"
-            android:textAlignment="textEnd" />
-    </LinearLayout>
-
-
-</LinearLayout>
+</androidx.cardview.widget.CardView>
