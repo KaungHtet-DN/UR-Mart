@@ -14,7 +14,7 @@
         android:layout_marginTop="40dp"
         >
         <TextView
-            android:layout_width="280dp"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:id="@+id/welcomeUserName"
             android:text="UserName"

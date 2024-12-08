@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".ProductListActivity"
+    android:background="@drawable/background"
+    android:paddingBottom="20dp"
+    >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="20dp"
+            android:id="@+id/userNameLayout"
+            >
+
+            <TextView
+                android:layout_width="500dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/welcomeUserName"
+                android:text="UserName"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textAlignment="center"
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/logout_button"
+                android:text="Log Out"
+                android:textSize="15sp"
+                android:layout_marginStart="250dp"
+                app:cornerRadius = "10dp"
+                />
+
+        </LinearLayout>
+
+        <androidx.appcompat.widget.SearchView
+            android:layout_width="700dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/search"
+            android:layout_below="@+id/userNameLayout"
+            android:layout_centerHorizontal="true"
+            app:iconifiedByDefault="false"
+            app:searchHintIcon="@null"
+            app:queryHint="Search..."
+            android:focusable="false"
+            android:background="@drawable/border"
+            app:closeIcon="@drawable/baseline_clear_24"
+            app:searchIcon="@drawable/baseline_search_24"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewProductList"
+            android:layout_width="700dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/search"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:scrollbars="vertical" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fab"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="40dp"
+            android:src="@drawable/baseline_add_24"
+            android:backgroundTint="@color/lavender"
+            app:tint="@color/white"
+            android:visibility="gone"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fabCart"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="80dp"
+            android:layout_marginRight="50dp"
+            android:src="@drawable/baseline_shopping_cart_24"
+            android:backgroundTint="@color/yellow"
+            app:tint="@color/white"/>
+
+    </RelativeLayout>

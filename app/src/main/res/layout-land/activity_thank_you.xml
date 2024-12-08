@@ -21,12 +21,28 @@
         android:layout_gravity="center"
       />
 
-    <Button
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Back To Shop"
-        android:id="@+id/thankyouBackToShop"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp"/>
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:padding="10dp">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Back To Shop"
+            android:backgroundTint="@color/teal"
+            android:id="@+id/thankyouBackToShop"
+            android:layout_marginRight="10dp"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Log Out"
+            android:id="@+id/thankyouLogOut"
+            android:backgroundTint="@color/yellow"
+            />
+    </LinearLayout>
 
 </LinearLayout>

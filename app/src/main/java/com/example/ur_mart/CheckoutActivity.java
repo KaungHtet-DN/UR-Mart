@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -23,8 +24,11 @@ import com.basgeekball.awesomevalidation.utility.RegexTemplate;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,12 +83,14 @@ public class CheckoutActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
-            double amount = Double.parseDouble(bundle.getString("Amount"));
+            double amount = Double.parseDouble(bundle.getString("Amount").replace("$","").trim());
 
-            checkOutAmount.setText(String.format("%.2f",amount));
-            checkOutHST.setText(String.format("%.2f", calculateTaxAmount(amount)));
-            checkOutTotalAmount.setText(String.format("%.2f", calculateTotalAmountWithTax(amount)));
+            checkOutAmount.setText("$ " + String.format("%.2f",amount));
+            checkOutHST.setText("$ " +String.format("%.2f", calculateTaxAmount(amount)));
+            checkOutTotalAmount.setText("$ " +String.format("%.2f", calculateTotalAmountWithTax(amount)));
         }
+
+        getUserInfo(currentUser.getUid());
 
         mAwesomeValidation.addValidation(CheckoutActivity.this, R.id.checkoutPersonName, RegexTemplate.NOT_EMPTY, R.string.err_name);
         mAwesomeValidation.addValidation(CheckoutActivity.this, R.id.checkoutPhoneNumber, PhoneNumber_Regex, R.string.err_phoneno);
@@ -100,6 +106,17 @@ public class CheckoutActivity extends AppCompatActivity {
         checkOutClearAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Clear all input values
+                checkoutPersonName.setText("");
+                checkoutPhoneNumber.setText("");
+                checkoutEmail.setText("");
+                checkoutAddress.setText("");
+                checkoutPostalCode.setText("");
+
+                checkoutCardNumber.setText("");
+                checkoutCardHolderName.setText("");
+                checkoutExpiryDate.setText("");
+                checkoutCVV.setText("");
 
             }
         });
@@ -119,6 +136,33 @@ public class CheckoutActivity extends AppCompatActivity {
                 if(mAwesomeValidation.validate()) {
                     clearAllItemsFromCart();
                 }
+            }
+        });
+    }
+
+    private void getUserInfo(String userId) {
+        // Reference to the user's node
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(userId);
+
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // Retrieve the name
+                    String name = dataSnapshot.child("name").getValue(String.class);
+                    checkoutPersonName.setText(name);
+
+                    String email = dataSnapshot.child("email").getValue(String.class);
+                    checkoutEmail.setText(email);
+
+                    String phone = dataSnapshot.child("phone").getValue(String.class);
+                    checkoutPhoneNumber.setText(phone);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                System.err.println("Error: " + databaseError.getMessage());
             }
         });
     }

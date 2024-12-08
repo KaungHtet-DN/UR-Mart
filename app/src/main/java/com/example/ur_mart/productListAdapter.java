@@ -2,7 +2,6 @@ package com.example.ur_mart;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +15,6 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -31,14 +27,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
+public class productListAdapter extends RecyclerView.Adapter<productListViewHolder> {
     Context context;
     List<Product> productList;
-    MyViewHolder.OnItemClickListener listener;
+    productListViewHolder.OnItemClickListener listener;
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
 
-    public MyAdapter(Context context, List<Product> productList, MyViewHolder.OnItemClickListener listener) {
+    public productListAdapter(Context context, List<Product> productList, productListViewHolder.OnItemClickListener listener) {
         this.context = context;
         this.productList = productList;
         this.listener = listener;
@@ -46,13 +42,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public productListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item, parent, false);
-        return new MyViewHolder(view);
+        return new productListViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull productListViewHolder holder, int position) {
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
 
@@ -61,7 +57,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
         holder.recProductName.setText(productList.get(position).getProductName());
         holder.recProductId.setText(productList.get(position).getproductId());
         holder.recDescription.setText(productList.get(position).getDescription());
-        holder.recPrice.setText("CAD " + String.valueOf(productList.get(position).getPrice()));
+        holder.recPrice.setText("Price: $ " + String.valueOf(productList.get(position).getPrice()));
 
         holder.recCard.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,13 +140,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
     }
 }
 
-class MyViewHolder extends RecyclerView.ViewHolder{
+class productListViewHolder extends RecyclerView.ViewHolder{
     ImageView recImage;
     TextView recProductName, recProductId, recPrice, recDescription;
     CardView recCard;
     ImageButton productListAddToCartButton;
 
-    public MyViewHolder(@NonNull View itemView) {
+    public productListViewHolder(@NonNull View itemView) {
         super(itemView);
 
         recImage = itemView.findViewById(R.id.recImage);

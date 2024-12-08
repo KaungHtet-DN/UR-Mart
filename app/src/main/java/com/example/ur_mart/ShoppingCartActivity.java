@@ -53,6 +53,7 @@ public class ShoppingCartActivity extends AppCompatActivity {
 
         cartAdapter = new CartAdapter(cartItems, this, item -> {
             cartItems.remove(item); // Remove from the list
+            updateTotalAmount();
             cartAdapter.notifyDataSetChanged();
         });
 
@@ -93,6 +94,14 @@ public class ShoppingCartActivity extends AppCompatActivity {
         });
     }
 
+    private void updateTotalAmount() {
+        double totalAmount = 0.0;
+        for (ShoppingCartItem item : cartItems) {
+            totalAmount += item.getQuantity() * item.getPrice();
+        }
+        totalAmountTextView.setText("$ " + String.format("%.2f", totalAmount));
+    }
+
     private void fetchCartItems(String userID) {
         dbRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -108,7 +117,7 @@ public class ShoppingCartActivity extends AppCompatActivity {
                 }
 
                 // Update the total amount TextView
-                totalAmountTextView.setText(String.format("%.2f", totalAmount));
+                totalAmountTextView.setText("$ " + String.format("%.2f", totalAmount));
 
                 if(cartItems == null || cartItems.size() == 0){
                     shoppingCartClearAll.setVisibility(View.GONE);

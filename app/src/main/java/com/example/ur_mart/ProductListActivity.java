@@ -11,9 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -41,7 +38,7 @@ public class ProductListActivity extends AppCompatActivity {
     DatabaseReference databaseReference;
     ValueEventListener eventListener;
     SearchView searchView;
-    MyAdapter adapter;
+    productListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +86,7 @@ public class ProductListActivity extends AppCompatActivity {
         dialog.show();
 
         productList = new ArrayList<>();
-        adapter = new MyAdapter(ProductListActivity.this, productList, item -> {
+        adapter = new productListAdapter(ProductListActivity.this, productList, item -> {
             productList.add(item); // Add to cart
         });
         recyclerView.setAdapter(adapter);

@@ -75,12 +75,12 @@ public class ProductDetailActivity extends AppCompatActivity {
             detailProductName.setText(bundle.getString("ProductName"));
             detailProductId.setText(bundle.getString("ProductId"));
             detailDescription.setText(bundle.getString("Description"));
-            detailPrice.setText(String.valueOf(bundle.getDouble("Price")));
+            detailPrice.setText("$ " + String.valueOf(bundle.getDouble("Price")));
             imageURI = bundle.getString("Image");
             Glide.with(this).load(bundle.getString("Image")).into(detailImage);
 
             // set default value 0.00 to total amount
-            totalAmountText.setText(String.valueOf(bundle.getDouble("Price")));
+            totalAmountText.setText("$ " + String.valueOf(bundle.getDouble("Price")));
         }
 
         // increase quantity button click event
@@ -90,7 +90,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                 if (quantity < maxValue) {
                     quantity++;
                     quantityText.setText(String.valueOf(quantity));
-                    totalAmountText.setText(String.valueOf(getTotalAmount(quantity)));
+                    totalAmountText.setText("$ " + String.valueOf(getTotalAmount(quantity)));
                 }
             }
         });
@@ -102,7 +102,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                 if (quantity > minValue) {
                     quantity--;
                     quantityText.setText(String.valueOf(quantity));
-                    totalAmountText.setText(String.valueOf(getTotalAmount(quantity))); // Round to fix 2 decimal place
+                    totalAmountText.setText("$ " + String.valueOf(getTotalAmount(quantity))); // Round to fix 2 decimal place
                 }
             }
         });
@@ -151,7 +151,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     }
 
     public double getTotalAmount(int quantity){
-        double totalAmountValue = Double.parseDouble(detailPrice.getText().toString()) * quantity;
+        double totalAmountValue = Double.parseDouble(detailPrice.getText().toString().replace("$","").trim()) * quantity;
         return Math.round(totalAmountValue * 100.0) / 100.0;
     }
 
@@ -161,8 +161,8 @@ public class ProductDetailActivity extends AppCompatActivity {
         String productName = detailProductName.getText().toString();
         String image = imageURI;
         int quantity = Integer.parseInt(quantityText.getText().toString());
-        double price = Double.parseDouble(detailPrice.getText().toString());
-        double amount = Double.parseDouble(totalAmountText.getText().toString());
+        double price = Double.parseDouble(detailPrice.getText().toString().replace("$","").trim());
+        double amount = Double.parseDouble(totalAmountText.getText().toString().replace("$","").trim());
 
         ShoppingCartItem item = new ShoppingCartItem(cartItemId, productId, productName, image, quantity, price, amount);
 

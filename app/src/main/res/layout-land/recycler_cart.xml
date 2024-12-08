@@ -7,7 +7,9 @@
     android:layout_marginEnd="10dp"
     android:layout_marginVertical="10dp"
     app:cardCornerRadius="10dp"
-    app:cardElevation="8dp">
+    app:cardElevation="8dp"
+    android:layout_gravity="center_horizontal"
+    >
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -30,11 +32,14 @@
             android:visibility="gone" />
 
         <LinearLayout
-            android:layout_width="240dp"
+            android:layout_width="460dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_toEndOf="@id/cartImage"
             android:id="@+id/cartProductInfo"
+            android:paddingLeft="10dp"
+            android:layout_marginRight="20dp"
+            android:padding="20dp"
             >
 
             <TextView
@@ -45,7 +50,6 @@
                 android:textColor="@color/yellow"
                 android:textSize="20sp"
                 android:gravity="top"
-                android:layout_marginTop="10dp"
                 android:layout_marginStart="10dp"/>
 
             <LinearLayout
@@ -53,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginStart="10dp"
-                android:paddingTop="5dp">
+                android:paddingTop="10dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -112,22 +116,15 @@
                     android:src="@drawable/baseline_arrow_right_24"
                     app:tint="@color/black"/>
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginStart="10dp"
-                android:paddingTop="2dp">
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Amount:"
                     android:textColor="@color/black"
                     android:textSize="16sp"
-                    android:paddingRight="10dp"/>
+                    android:paddingLeft="20dp"
+                    android:paddingRight="10dp"
+                    android:layout_marginVertical="5dp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -135,19 +132,19 @@
                     android:id="@+id/cartAmount"
                     android:text="10.50"
                     android:textColor="@color/black"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp"
+                    android:layout_marginVertical="5dp"/>
             </LinearLayout>
 
         </LinearLayout>
 
         <ImageButton
-            android:layout_width="50dp"
-            android:layout_height="60dp"
+            android:layout_width="100dp"
+            android:layout_height="110dp"
             android:src="@drawable/baseline_delete_forever_24"
             android:id="@+id/cartRemoveButton"
             android:layout_toEndOf="@+id/cartProductInfo"
             android:layout_centerVertical="true"
-            android:paddingLeft="10dp"
             android:backgroundTint="@color/white"
             app:tint="@color/black"
             />

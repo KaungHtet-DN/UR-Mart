@@ -48,10 +48,12 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         Glide.with(context).load(cartItems.get(position).getImage()).into(holder.cartImage);
         holder.productId.setText(item.getProductId());
         holder.productName.setText(item.getProductName());
-        holder.price.setText(String.valueOf(item.getPrice()));
+        holder.price.setText("$ " + String.valueOf(item.getPrice()));
         holder.quantity.setText(String.valueOf(item.getQuantity()));
-        holder.amount.setText(String.format("%.2f", item.getPrice() * item.getQuantity()));
+        holder.amount.setText("$ " +String.format("%.2f", item.getPrice() * item.getQuantity()));
 
+        holder.cartIncrementButton.setOnClickListener(v -> increaseCartItemQuantity(item));
+        holder.cartDecrementButton.setOnClickListener(v -> decreaseCartItemQuantity(item));
         holder.cartRemoveButton.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onRemoveClick(item);
@@ -68,6 +70,40 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     public void setCartItems(List<ShoppingCartItem> cartItems) {
         this.cartItems = cartItems;
         notifyDataSetChanged();
+    }
+
+    public void increaseCartItemQuantity(ShoppingCartItem cartItem) {
+        DatabaseReference cartItemRef = FirebaseDatabase.getInstance()
+                .getReference("shopping_cart")
+                .child(currentUser.getUid())
+                .child(cartItem.getProductId());
+
+        cartItem.setQuantity(cartItem.getQuantity() + 1);
+
+        cartItemRef.setValue(cartItem).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                notifyDataSetChanged();
+            }
+        });
+    }
+
+    public void decreaseCartItemQuantity(ShoppingCartItem cartItem) {
+        if (cartItem.getQuantity() > 1) {
+            DatabaseReference cartItemRef = FirebaseDatabase.getInstance()
+                    .getReference("shopping_cart")
+                    .child(currentUser.getUid())
+                    .child(cartItem.getProductId());
+
+            cartItem.setQuantity(cartItem.getQuantity() - 1);
+
+            cartItemRef.setValue(cartItem).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    notifyDataSetChanged();
+                }
+            });
+        } else {
+            Toast.makeText(context, "Minimum quantity is 1", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void removeCartItem(ShoppingCartItem cartItem){
@@ -89,7 +125,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
 public static class CartViewHolder extends RecyclerView.ViewHolder {
    TextView productId, productName, price, quantity, amount ;
-   ImageButton cartRemoveButton;
+   ImageButton cartIncrementButton, cartDecrementButton, cartRemoveButton;
    ImageView cartImage;
 
    public CartViewHolder(View itemView) {
@@ -100,6 +136,8 @@ public static class CartViewHolder extends RecyclerView.ViewHolder {
        price = itemView.findViewById(R.id.cartPrice);
        quantity = itemView.findViewById(R.id.cartQuantity);
        amount = itemView.findViewById(R.id.cartAmount);
+       cartDecrementButton = itemView.findViewById(R.id.cartDecrementButton);
+       cartIncrementButton = itemView.findViewById(R.id.cartIncrementButton);
        cartRemoveButton = itemView.findViewById(R.id.cartRemoveButton);
       }
    }
